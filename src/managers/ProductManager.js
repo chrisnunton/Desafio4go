@@ -36,6 +36,10 @@ class ProductManager{
             if(this.fileExists()){
                 const content = await fs.promises.readFile(this.path,"utf-8");
                 const products = JSON.parse(content);
+                   const existingProduct = products.find(p => p.code === product.code);
+                    if (existingProduct) {
+                        throw new Error(`Ya existe un producto con el código ${product.code}`);
+                        }
                 const productId = this.generateId(products);
                 product.id = productId;
                 // console.log("product: ", product);
