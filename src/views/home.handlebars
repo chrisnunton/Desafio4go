@@ -1,0 +1,9 @@
+{{#if products}}
+  <ul>
+    {{#each products}}
+      <li>{{this.name}} - {{this.price}}</li>
+    {{/each}}
+  </ul>
+{{else}}
+  <p>No hay productos</p>
+{{/if}}

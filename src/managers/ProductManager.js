@@ -59,6 +59,21 @@ class ProductManager{
         }
     };
 
+    // async getProducts(){
+    //     try {
+    //         if(this.fileExists()){
+    //             const content = await fs.promises.readFile(this.path,"utf-8");
+    //             const products = JSON.parse(content);
+    //             return products;
+    //         } else {
+    //             throw new Error("El archivo no existe");
+    //         }
+    //     } catch (error) {
+    //         // console.log(error.message);
+    //         throw new Error(error.message);
+    //     }
+    // };
+
     async getProducts(){
         try {
             if(this.fileExists()){
@@ -66,10 +81,9 @@ class ProductManager{
                 const products = JSON.parse(content);
                 return products;
             } else {
-                throw new Error("El archivo no existe");
+                throw new Error(`El archivo ${this.path} no existe`);
             }
         } catch (error) {
-            // console.log(error.message);
             throw new Error(error.message);
         }
     };
@@ -147,8 +161,11 @@ class ProductManager{
 export {ProductManager}
 
 
+const productManager = new ProductManager("products.json");
 
 
+const products = await productManager.getProducts();
+console.log(products);
 
 
 

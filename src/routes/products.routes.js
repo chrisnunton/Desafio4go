@@ -7,65 +7,47 @@ const productManager = new ProductManager("products.json");
 const router = Router();
 
 router.get("/", async(req,res)=>{
-    try {
-        const limit = req.query.limit;
-        const products = await productManager.getProducts();
-        if (limit) {
-            res.json({ status: 'success', data: products.slice(0, limit) });
-            //res.json({status:"success", data:products});
-          } else {
-            res.json({ status: 'success', data: products });
-          }
-       
-    } catch (error) {
-        res.status(400).json({status:"error", message:error.message});
-    }
+  try {
+      const limit = req.query.limit;
+      const products = await productManager.getProducts(); // obtener la lista de productos
+      if (limit) {
+          res.json({ status: 'success', data: products.slice(0, limit) });
+        } else {
+          res.json({ status: 'success', data: products });
+        }
+  } catch (error) {
+      res.status(400).json({status:"error", message:error.message});
+  }
 });
 
 //trae producto solo por id
 router.get('/:pid', async (req, res) => {
-    try {
-      const pid = req.params.pid;
-      const product = await productManager.getProductById(pid);
-      if (!product) {
-        res.status(404).json({ message: 'Producto no encontrado' });
-      } else {
-        res.json(product);
-      }
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Error  del Servidor' });
+  try {
+    const pid = req.params.pid;
+    const product = await productManager.getProductById(pid);
+    if (!product) {
+      res.status(404).json({ message: 'Producto no encontrado' });
+    } else {
+      res.json(product);
     }
-  });
-
-
-  let lastId = 0;
-
-//endpoint para agregar el producto
-router.post("/",async(req,res)=>{
-    try {
-        const { title, description, code, price, stock, category, thumbnails } = req.body;
-        if (!title || !description || !code || !price || !stock || !category) {
-            return res.status(400).json({ status: 'error', message: 'Los campos no son válidos' });
-          }
-          const newId = ++lastId;
-          const newProduct = {
-            id: newId,
-            title,
-            description,
-            code,
-            price,
-            status: true,
-            stock,
-            category,
-            thumbnails,
-          };
-        const productSaved = await productManager.addProduct(newProduct);
-        res.json({status:"success", data:productSaved});
-    } catch (error) {
-        res.status(400).json({status:"error", message:error.message});
-    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error del Servidor' });
+  }
 });
+
+
+
+router.post("/", async(req,res)=>{
+  try {
+      const product = req.body;
+      const newProduct = await productManager.addProduct(product);
+      res.json({status:"success", data:newProduct});
+  } catch (error) {
+      res.status(400).json({status:"error", message:error.message});
+  }
+});
+
 
 // actualizacion de producto existente
 router.put('/:pid', async (req, res) => {
@@ -116,6 +98,9 @@ router.delete('/:pid', async (req, res) => {
       res.status(400).json({ status: 'error', message: error.message });
     }
   });
+
+  export{router as productRouter};
+
 //   router.delete('/:pid', async (req, res) => {
 //     try {
 //       const pid = req.params.pid;
@@ -129,7 +114,7 @@ router.delete('/:pid', async (req, res) => {
 
 
 
-export{router as productRouter};
+
 
 //POSTMAN
 //http://localhost:8080/api/products/

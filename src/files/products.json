@@ -1,1 +1,17 @@
-[]
+[
+  {
+    "id": 1,
+    "title": "nombre del producto1",
+    "description": "descripción del producto1",
+    "code": "001",
+    "price": 100,
+    "status": true,
+    "stock": 50,
+    "category": "categoría del producto",
+    "thumbnails": [
+      "url de la imagen 1",
+      "url de la imagen 2",
+      "url de la imagen 3"
+    ]
+  }
+]
